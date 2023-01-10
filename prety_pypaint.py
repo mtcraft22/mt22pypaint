@@ -1,7 +1,6 @@
 import tkinter
 import customtkinter
-import PIL.Image
-import PIL.ImageTk
+
 
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("test")
