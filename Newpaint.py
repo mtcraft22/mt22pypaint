@@ -1,4 +1,4 @@
-import tkinter
+import tkinter 
 from tkinter import ttk
 
 cords = []
@@ -38,7 +38,6 @@ class Newpaint:
                                              tags="rectprod", outline="red")
             case _:
                 pass
-
 
     def origin(self, event):
         self.pressing = True
