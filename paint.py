@@ -1,9 +1,6 @@
 from tkinter import *
 from tkinter import colorchooser, messagebox
 
-
-
-
 root = Tk()
 
 material = "lapis"
@@ -53,8 +50,8 @@ cord = []
 
 
 def des():
-    avd=messagebox.askquestion("Adventecia", "Si elimina eliminara el buffer ctr-y/z continuar?")
-    if avd=="yes":
+    avd = messagebox.askquestion("Adventecia", "Si elimina eliminara el buffer ctr-y/z continuar?")
+    if avd == "yes":
         lineas_ancho.clear()
         rectangulos_width.clear()
         eliminados.clear()
@@ -124,7 +121,7 @@ def linea(event):
     if len(cord) == 4 or len(cord) > 4:
         b = lienzo.create_line(cord[0], cord[1], cord[2], cord[3], fill=col, tags=(col, "linea"),
                                width=hancho.get() * 2, )
-        lineas_ancho [lienzo.getint(b)] = hancho.get() * 2
+        lineas_ancho[lienzo.getint(b)] = hancho.get() * 2
         cord.clear()
 
 
@@ -160,60 +157,52 @@ def getcolor(event):
 eliminados = []
 
 
-
-
 def detraas(event):
     try:
-        if lienzo.gettags(lienzo.find_all()[-1:-5])[1]=="lapis":
+        if lienzo.gettags(lienzo.find_all()[-1])[1] == "lapis":
             for i in range(10):
                 lienzo.delete(lienzo.find_all()[-1])
                 eliminados.append((lienzo.gettags(lienzo.find_all()[-1])[1], lienzo.coords(lienzo.find_all()[-1]),
-                                lienzo.gettags(lienzo.find_all()[-1])[0],lienzo.find_all()[-1]))
+                                   lienzo.gettags(lienzo.find_all()[-1])[0], lienzo.find_all()[-1]))
         else:
             lienzo.delete(lienzo.find_all()[-1])
             eliminados.append((lienzo.gettags(lienzo.find_all()[-1])[1], lienzo.coords(lienzo.find_all()[-1]),
-                            lienzo.gettags(lienzo.find_all()[-1])[0],lienzo.find_all()[-1]))
+                               lienzo.gettags(lienzo.find_all()[-1])[0], lienzo.find_all()[-1]))
     except IndexError:  # no more items to delete then return
-        messagebox.showinfo("Info", "No es posible eliminar sin elementos")
+        messagebox.showinfo("Info", f"No es posible eliminar sin elementos, elementos eliminados")
         return
 
 
 def alante(event):
     try:
-        if lienzo.gettags(lienzo.find_all()[-1:-5])[1]=="lapis":
-            for i in range(10):
-                materia = eliminados[-1][0]
-                if materia == "lapis":
-                    lienzo.create_rectangle(eliminados[-1][1], fill=eliminados[-1][2], outline=eliminados[-1][2],
-                                            tags=(eliminados[-1][2], materia))
-                elif materia == "rect":
-                    lienzo.create_rectangle(eliminados[-1][1], outline=eliminados[-1][2], width=str(rectangulos_width[eliminados[-1][3]]),
-                                            tags=(eliminados[-1][2], materia))
-                    print(materia," ",rectangulos_width," ",rectangulos_width[eliminados[-1][3]])
-                elif materia == "linea":
-                    lienzo.create_line(eliminados[-1][1], fill=eliminados[-1][2], tags=(eliminados[-1][2], materia),
-                                    width=str(lineas_ancho[eliminados[-1][3]]), )
-                    print(materia," ",lineas_ancho," ",lineas_ancho[eliminados[-1][3]])
+        if lienzo.gettags(lienzo.find_all()[-1])[0] == "lapis":
+            contador = 0
+
+            materia = eliminados[-1][0]
+            while materia == "lapis" and contador < 10:
+                lienzo.create_rectangle(eliminados[-1][1], fill=eliminados[-1][2], outline=eliminados[-1][2],
+                                        tags=(eliminados[-1][2], materia))
                 eliminados.pop(-1)
+                contador += 1
                 print(materia)
         else:
             materia = eliminados[-1][0]
-            if materia == "lapis":
-                lienzo.create_rectangle(eliminados[-1][1], fill=eliminados[-1][2], outline=eliminados[-1][2],
+            if materia == "rect":
+                lienzo.create_rectangle(eliminados[-1][1], outline=eliminados[-1][2],
+                                        width=str(rectangulos_width[eliminados[-1][3]]),
                                         tags=(eliminados[-1][2], materia))
-            elif materia == "rect":
-                lienzo.create_rectangle(eliminados[-1][1], outline=eliminados[-1][2], width=str(rectangulos_width[eliminados[-1][3]]),
-                                        tags=(eliminados[-1][2], materia))
-                print(materia," ",rectangulos_width," ",rectangulos_width[eliminados[-1][3]])
+
+                print(materia)
+                print(materia, " ", rectangulos_width, " ", rectangulos_width[eliminados[-1][3]])
+                eliminados.pop(-1)
             elif materia == "linea":
                 lienzo.create_line(eliminados[-1][1], fill=eliminados[-1][2], tags=(eliminados[-1][2], materia),
-                                width=str(lineas_ancho[eliminados[-1][3]]), )
-                print(materia," ",lineas_ancho," ",lineas_ancho[eliminados[-1][3]])
-            eliminados.pop(-1)
+                                   width=str(lineas_ancho[eliminados[-1][3]]))
+                print(materia, " ", lineas_ancho, " ", lineas_ancho[eliminados[-1][3]])
+                eliminados.pop(-1)
             print(materia)
-
-    except IndexError:  # no more items to restore then return
-        messagebox.showinfo("Info", "No es posible restaurar elementos no creados")
+    except IndexError:
+        messagebox.showinfo("Info", f"No es posible reustarar sin elementos, elementos eliminados")
         return
 
 
