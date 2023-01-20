@@ -104,14 +104,14 @@ def motion2(event):
     
     x, y = event.x, event.y
     lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill=col,
-                            outline=col, tags=(col, "lapis", x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
+                            outline=col, tags=(col, "lapis",0, x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
     cord.clear()
 
 def motion(event):
     
     x, y = event.x, event.y
     lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill="white",
-                            outline="white", tags=(col, "goma",x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(),))
+                            outline="white", tags=(col, "goma",0,x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(),))
     cord.clear()
 
 
@@ -155,7 +155,7 @@ def getcolor(event):
         lienzo.tag_bind(tag, '<Button-2>', lambda _, i=tag: set_color(i))
 
 
-eliminados = queue.Queue()
+eliminados = queue.LifoQueue()
 
 
 
@@ -177,27 +177,31 @@ def detraas(event):
 tags=(col, "linea", hancho.get() * 2, cord)
 lienzo.create_rectangle(cord[0], cord[1], cord[2], cord[3], outline=col, width=hancho.get() * 2,tags=(col, "rect", hancho.get() * 2, cord ))'''
 def alante(event):
-   
-    if eliminados.empty():
-        return
-    else:
-        item = eliminados.get()
-        materia= item[1]
-        if materia == "lapis":
-            for i in range(10):
-                print(item)
-                lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],fill=item[0],width=item[2],tags=item)
-                item = eliminados.get()
-                materia= item[1]  
-        else:
+    item = eliminados.get()
+    materia= item[1]
+    if materia == "lapis":
+        for i in range(10):
+            print(item)
+            lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],fill=item[0],width=item[2],tags=item)
             item = eliminados.get()
-            materia= item[1]
-            if materia == "rect":
+            materia= item[1]  
+            if eliminados.empty():
+                messagebox.showinfo("Info","No existen elemntos a reustarar")
+                return
+    else:
+        if materia == "rect":
+            if eliminados.empty():
+                messagebox.showinfo("Info","No existen elemntos a reustarar")
+                return
+            lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],width=item[2],tags=item)
+        elif materia == "linea":
+            if eliminados.empty():
+                messagebox.showinfo("Info","No existen elemntos a reustarar")
+                return
+            lienzo.create_line(item[3],item[4],item[5],item[6],fill=item[0],width=item[2],tags=item)
+        
                 
-                lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],width=item[2],tags=item)
-            elif materia == "linea":
-                lienzo.create_line(item[3],item[4],item[5],item[6],fill=item[0],width=item[2],tags=item)
-   
+        
 
 
 lienzo.bind('<Button-2>', getcolor)
