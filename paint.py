@@ -2,9 +2,6 @@ from tkinter import *
 import queue
 from tkinter import colorchooser, messagebox
 
-
-
-
 root = Tk()
 material = "lapis"
 col = "black"
@@ -55,8 +52,8 @@ cord = []
 
 
 def des():
-    avd=messagebox.askquestion("Adventecia", "Si elimina eliminara el buffer ctr-y/z continuar?")
-    if avd=="yes":
+    avd = messagebox.askquestion("Adventecia", "Si elimina eliminara el buffer ctr-y/z continuar?")
+    if avd == "yes":
         eliminados = queue.Queue()
         lienzo.delete("all")
     else:
@@ -162,15 +159,19 @@ eliminados = queue.LifoQueue()
 
 def detraas(event):
     try:
+
+
         if lienzo.gettags(lienzo.find_all()[-1])[1]=="lapis":
             for i in range(10):   
                 eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
                 lienzo.delete(lienzo.find_all()[-1])
+                eliminados.append((lienzo.gettags(lienzo.find_all()[-1])[1], lienzo.coords(lienzo.find_all()[-1]),
+                                lienzo.gettags(lienzo.find_all()[-1])[0],lienzo.find_all()[-1]))
         else:
             eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
             lienzo.delete(lienzo.find_all()[-1])
     except IndexError:  # no more items to delete then return
-        messagebox.showinfo("Info", "No es posible eliminar sin elementos")
+        messagebox.showinfo("Info", f"No es posible eliminar sin elementos, elementos eliminados")
         return
 
 '''
