@@ -44,7 +44,10 @@ cord = []
 def des():
     avd = messagebox.askquestion("Adventecia", "Si elimina eliminara el buffer ctr-y/z continuar?")
     if avd == "yes":
-        eliminados = queue.LifoQueue()
+
+
+        while not(eliminados.empty()):
+            eliminados.get()
         lienzo.delete("all")
     else:
         return
@@ -113,27 +116,38 @@ def recta(event):
 def spray(event):
     x, y = event.x, event.y
     dis = (hancho.get() * 2) + dis_linias.get()
-    lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill=col,outline=col, tags=col)
-    lienzo.create_rectangle(x - hancho.get() + dis, y + hancho.get() - dis, x + hancho.get() + dis, y - hancho.get() - dis, fill=col, outline=col, tags=col)
+    lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill=col,outline=col, tags=(col, "spray",0,x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
+    lienzo.create_rectangle(x - hancho.get() + dis, y + hancho.get() - dis, x + hancho.get() + dis, y - hancho.get() - dis, fill=col, outline=col, tags=(col, "spray",0,x - hancho.get()+dis, y + hancho.get()-dis, 
+    x + hancho.get()+dis, y - hancho.get()-dis))
 
 def getcolor(event):
     for item_id in lienzo.find_all():
         tag = lienzo.gettags(item_id)[0]
         lienzo.tag_bind(tag, '<Button-2>', lambda _, i=tag: set_color(i))
 
-open("datos.dat","a")
 def detraas(event):
     try:
         if lienzo.gettags(lienzo.find_all()[-1])[1]=="lapis":
             for i in range(10):   
                 eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
                 lienzo.delete(lienzo.find_all()[-1])
-              
+        elif lienzo.gettags(lienzo.find_all()[-1])[1]=="spray":
+            for i in range(10):
+                a=lienzo.gettags(lienzo.find_all()[-1])
+                eliminados.put(a)
+                if not(a[1] =="spray"):
+                    return
+                lienzo.delete(lienzo.find_all()[-1])
+                a=lienzo.gettags(lienzo.find_all()[-1])
+                eliminados.put(a)
+                if not(a[1] =="spray"):
+                    return
+                lienzo.delete(lienzo.find_all()[-1])
         else:
             eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
             lienzo.delete(lienzo.find_all()[-1])
-    except IndexError:  # no more items to delete then return
-        messagebox.showinfo("Info", f"No es posible eliminar sin elementos, elementos eliminados")
+    except IndexError as error:  # no more items to delete then return
+        messagebox.showerror("Info", f"No es posible eliminar sin elementos, elementos eliminados {error}")
         return
 
 '''
@@ -141,7 +155,7 @@ tags=(col, "linea", hancho.get() * 2, cord)
 lienzo.create_rectangle(cord[0], cord[1], cord[2], cord[3], outline=col, width=hancho.get() * 2,tags=(col, "rect", hancho.get() * 2, cord ))'''
 def alante(event):
     if eliminados.empty():
-            messagebox.showinfo("Info","No existen elementos a reustarar")
+            messagebox.showerror("Info", "No existen elementos a reustarar")
             return
     item = eliminados.get()
     materia = item[1]
@@ -151,12 +165,29 @@ def alante(event):
         lienzo.create_line(item[3],item[4],item[5],item[6],fill=item[0],width=item[2],tags=item)
     elif materia == "lapis":
         for i in range(10):
-            print(item)
             lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],fill=item[0],width=item[2],tags=item)
             item = eliminados.get()
             materia= item[1]  
             if eliminados.empty():
-                messagebox.showinfo("Info","No existen elementos a reustarar")
+                messagebox.showerror("Info","No existen elementos a reustarar")
+                return
+    elif materia == "spray": 
+        for i in range(10):
+            lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],fill=item[0],width=item[2],tags=item)
+            item = eliminados.get()
+            materia= item[1]
+            if eliminados.empty():
+                messagebox.showerror("Info","No existen elementos a reustarar")
+                return
+            elif not (item[1] =="spray"):
+                return
+            lienzo.create_rectangle(item[3],item[4],item[5],item[6],outline=item[0],fill=item[0],width=item[2],tags=item)
+            item = eliminados.get()
+            materia= item[1] 
+            if eliminados.empty():
+                messagebox.showerror("Info","No existen elementos a reustarar")
+                return
+            elif not(item[1] == "spray"):
                 return
             
 lienzo.bind('<Button-2>', getcolor)
