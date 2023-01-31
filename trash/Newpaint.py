@@ -1,4 +1,4 @@
-import tkinter 
+import tkinter, random
 from tkinter import ttk
 
 
@@ -10,6 +10,8 @@ class Newpaint:
         self.canvas = tkinter.Canvas(width=800, height=600, bg="white")
         self.rectcreation = tkinter.Button(text="Rectangulo", command=lambda: self.set_matterial("rect"))
         self.circlecreation = tkinter.Button(text="Circulo", command=lambda: self.set_matterial("circ"))
+        self.trianglecre = tkinter.Button(text="triangle", command=lambda: self.set_matterial("triangle"))
+        self.trianglecre2 = tkinter.Button(text="triangle", command=lambda: self.set_matterial("triangle2"))
         # show and config the widgets
         self.__show()
         #binding mouse events to canvas actions
@@ -25,19 +27,31 @@ class Newpaint:
         self.material = m
 
     def __show(self):
-        self.canvas.grid(row=1, column=0, pady=20, padx=20)
+        self.canvas.grid(row=1, column=0, pady=20, padx=20,rowspan=10)
         self.rectcreation.grid(row=1, column=1)
         self.circlecreation.grid(row=1, column=2)
-
+        self.trianglecre.grid(row=2,column=1)
+        self.trianglecre2.grid(row=2,column=2)
     def draw_rect(self, event):
         self.canvas.delete("rectprod")
         match self.material:
+            
             case "circ":
                 self.canvas.create_arc(self.cords[0][0], self.cords[0][1], event.x, event.y, width=10,
                                         tags="rectprod", fill="red")
             case "rect":
                 self.canvas.create_rectangle(self.cords[0][0], self.cords[0][1], event.x, event.y, width=10,
                                              tags="rectprod", outline="red")
+            case "triangle":
+                prex=self.cords[0][0]
+                prey=self.cords[0][1]
+                self.canvas.create_polygon(prex,event.y,event.x,prey,event.x,event.y,tags="rectprod", outline="red",fill=random.choice(("red","brown","blue","orange")), width=5)
+            case "triangle2":
+                prex=self.cords[0][0]
+                prey=self.cords[0][1]
+           
+                self.canvas.create_polygon(prex,event.y,event.x,event.y,prex-((prex-event.x)/2),prey,tags="rectprod", outline="red",fill=random.choice(("red","brown","blue","orange")), width=5)
+                
             case _:
                 pass
 
