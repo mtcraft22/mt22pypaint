@@ -44,16 +44,16 @@ class Newpaint:
 
             case "circ":
                 circle = self.canvas.create_oval(self.cords[0][0], self.cords[0][1], event.x, event.y, width=10,
-                                                 tags=("rectprod",f"Circulo: w:{abs(self.cords[0][0]-event.x)}"), fill="red")
+                                                 tags=("rectprod",f"Circulo: w:{abs(self.cords[0][0]-event.x)} h: {abs(self.cords[0][1]-event.y)}"), fill="red")
 
             case "rect":
                 re = self.canvas.create_rectangle(self.cords[0][0], self.cords[0][1], event.x, event.y, width=10,
-                                                  tags=("rectprod",f"Rect: w:{abs(self.cords[0][0]-event.x)}"), outline="red")
+                                                  tags=("rectprod",f"Rect: w:{abs(self.cords[0][0]-event.x)} h: {abs(self.cords[0][1]-event.y)}"), outline="red")
 
             case "triangle":
                 prex = self.cords[0][0]
                 prey = self.cords[0][1]
-                pol = self.canvas.create_polygon(prex, event.y, event.x, prey, event.x, event.y, tags=("rectprod",f"T_Rect: w:{abs(self.cords[0][0]-event.x)}"),
+                pol = self.canvas.create_polygon(prex, event.y, event.x, prey, event.x, event.y, tags=("rectprod",f"T_Rect: w:{abs(self.cords[0][0]-event.x)} h: {abs(self.cords[0][1]-event.y)}"),
                                                  outline="red", fill=random.choice(("red", "brown", "blue", "orange")),
                                                  width=5)
 
@@ -62,7 +62,7 @@ class Newpaint:
                 prey = self.cords[0][1]
 
                 tri = self.canvas.create_polygon(prex, event.y, event.x, event.y, prex - ((prex - event.x) / 2), prey,
-                                                 tags=("rectprod",f"T_Equi: w:{abs(self.cords[0][0]-event.x)}"), outline="red",
+                                                 tags=("rectprod",f"T_Equi: w:{abs(self.cords[0][0]-event.x)} h: {abs(self.cords[0][1]-event.y)}"), outline="red",
                                                  fill=random.choice(("red", "brown", "blue", "orange")), width=5)
 
 

@@ -1,6 +1,7 @@
 from tkinter import *
 import queue
 from tkinter import colorchooser, messagebox
+import platform
 
 eliminados = queue.LifoQueue()
 root = Tk()
@@ -84,20 +85,20 @@ def set_material(m):
         rect.config(bg="red")
 
 
-def clear(event):
+def clear(event=0):
     cord.clear()
 
-def motion2(event):
+def motion2(event=0):
     x, y = event.x, event.y
     lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill=col, outline=col, tags=(col, "lapis",0, x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
     cord.clear()
 
-def motion(event):
+def motion(event=0):
     x, y = event.x, event.y
     lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill="white", outline="white", tags=("white", "goma",0,x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
     cord.clear()
 
-def linea(event):
+def linea(event=0):
     x, y = event.x, event.y
     cord.append(x)
     cord.append(y)
@@ -105,7 +106,7 @@ def linea(event):
         lienzo.create_line(cord[0], cord[1], cord[2], cord[3], fill=col, tags=(col, "linea", hancho.get() * 2,cord[0], cord[1], cord[2], cord[3]), width=hancho.get() * 2)
         cord.clear()
 
-def recta(event):
+def recta(event=0):
     x, y = event.x, event.y
     cord.append(x)
     cord.append(y)
@@ -113,14 +114,14 @@ def recta(event):
         lienzo.create_rectangle(cord[0], cord[1], cord[2], cord[3], outline=col, width=hancho.get() * 2,tags=(col, "rect", hancho.get() * 2, cord[0], cord[1], cord[2], cord[3] ))
         cord.clear()
 
-def spray(event):
+def spray(event=0):
     x, y = event.x, event.y
     dis = (hancho.get() * 2) + dis_linias.get()
     lienzo.create_rectangle(x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get(), fill=col,outline=col, tags=(col, "spray",0,x - hancho.get(), y + hancho.get(), x + hancho.get(), y - hancho.get()))
     lienzo.create_rectangle(x - hancho.get() + dis, y + hancho.get() - dis, x + hancho.get() + dis, y - hancho.get() - dis, fill=col, outline=col, tags=(col, "spray",0,x - hancho.get()+dis, y + hancho.get()-dis, 
     x + hancho.get()+dis, y - hancho.get()-dis))
 
-def getcolor(event):
+def getcolor(event=0):
     for item_id in lienzo.find_all():
         tag = lienzo.gettags(item_id)[0]
         lienzo.tag_bind(tag, '<Button-2>', lambda _, i=tag: set_color(i))
@@ -140,12 +141,11 @@ def detraas(event):
                 lienzo.delete(lienzo.find_all()[-1])
                 a=lienzo.gettags(lienzo.find_all()[-1])
                 eliminados.put(a)
-                if not(a[1] =="spray"):
-                    return
                 lienzo.delete(lienzo.find_all()[-1])
         else:
             eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
             lienzo.delete(lienzo.find_all()[-1])
+            eliminados.put(lienzo.gettags(lienzo.find_all()[-1]))
     except IndexError as error:  # no more items to delete then return
         messagebox.showerror("Info", f"No es posible eliminar sin elementos, elementos eliminados {error}")
         return
