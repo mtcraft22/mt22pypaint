@@ -15,25 +15,27 @@ Una aplicación sencilla de pintura (paint) desarrollada en Python.
 ## 🚀 Instalación
 
 1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/mtcraft22/mt22pypaint.git```
+
+   ``git clone https://github.com/mtcraft22/mt22pypaint.git´´
 2. Intalar Tkinter en caso nesesario:
-   2.1 : Crea un entorno virtual:
+   1 : Crea un entorno virtual:
    ```bash
      python3 -m venv ./venv
-   ``
-   2.2 : activa el entorno_
+   ```
+   2 : activa el entorno_
    ```bash
      ./venv/bin/activate
    ```
-   2.3: instala tkinter:
+   3: instala tkinter:
    ```bash
      pip install tkinter
    ```
 4. Ejecutar el paint.py
    - En linux:
    ```bash
-       python3 paint.py```
+       python3 paint.py
+   ```
    - En Windows:
    ```bash
-       python paint.py```
+       python paint.py
+   ```
